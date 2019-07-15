@@ -15,5 +15,5 @@ mkdir -p target/dependencies/ballerina-examples/
 mv ballerina-lang/examples target/dependencies/ballerina-examples/examples/
 rm ballerina-lang -r
 
-go run tools/ballerinaByExample/tools/generate.go "target/dependencies/ballerina-examples" $2
+go run tools/siddhiByExample/tools/generate.go "target/dependencies/ballerina-examples" $2
 echo "....Completed building BBE Site...."
