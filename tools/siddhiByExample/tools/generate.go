@@ -25,7 +25,7 @@ var siteDir = "test-siddhi"                             //os.Args[2];
 var dirPathWordSeparator = "-"
 var filePathWordSeparator = "_"
 var consoleOutputExtn = ".out"
-var balFileExtn = ".siddhi"
+var siddhiFileExtn = ".siddhi"
 var protoFilePathExtn = ".proto"
 var yamlFileExtn = ".yaml"
 var descriptionFileExtn = ".description"
@@ -126,7 +126,7 @@ func whichLexer(path string) string {
 		//    return "server"
 	} else if strings.HasSuffix(path, consoleOutputExtn) {
 		return "console"
-	} else if strings.HasSuffix(path, balFileExtn) {
+	} else if strings.HasSuffix(path, siddhiFileExtn) {
 		return "siddhi"
 	} else if strings.HasSuffix(path, protoFilePathExtn) {
 		return "siddhi"
@@ -262,7 +262,7 @@ func parseSegs(sourcePath string) ([]*Seg, string) {
 		seg.CodeRun = strings.Contains(seg.Code, "package main")
 		seg.IsConsoleOutput = strings.HasSuffix(sourcePath, consoleOutputExtn)
 	}
-	if strings.HasSuffix(sourcePath, balFileExtn) || strings.HasSuffix(sourcePath, protoFilePathExtn) || strings.HasSuffix(sourcePath, yamlFileExtn) {
+	if strings.HasSuffix(sourcePath, siddhiFileExtn) || strings.HasSuffix(sourcePath, protoFilePathExtn) || strings.HasSuffix(sourcePath, yamlFileExtn) {
 		//segs[0].Docs = descFileContent
 		descFileContent = ""
 	}
@@ -354,17 +354,17 @@ func parseExamples(categories []BBECategory) []*Example {
 				continue
 			}
 
-			balFiles := getAllBalFiles(fileDirPath)
-			if len(balFiles) == 0 {
+			siddhiFiles := getAllSiddhiFiles(fileDirPath)
+			if len(siddhiFiles) == 0 {
 				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping bbe : "+exampleName+". No *.siddhi files are found")
 				continue
 			}
 
 			rearrangedPaths = appendFilePath(rearrangedPaths, descFilePath)
-			for _, balFilePath := range balFiles {
-				var extension = filepath.Ext(balFilePath)
-				var currentSample = balFilePath[0 : len(balFilePath)-len(extension)]
-				rearrangedPaths = appendFilePath(rearrangedPaths, balFilePath)
+			for _, siddhiFilePath := range siddhiFiles {
+				var extension = filepath.Ext(siddhiFilePath)
+				var currentSample = siddhiFilePath[0 : len(siddhiFilePath)-len(extension)]
+				rearrangedPaths = appendFilePath(rearrangedPaths, siddhiFilePath)
 
 				consoleOutputFilePath := currentSample + consoleOutputExtn
 				serverOutputFilePath := currentSample + serverOutputPrefix + consoleOutputExtn
@@ -384,7 +384,7 @@ func parseExamples(categories []BBECategory) []*Example {
 					}
 
 					if !hasOutput {
-						fmt.Fprintln(os.Stderr, "\t[WARN] No console output file found for : "+balFilePath)
+						fmt.Fprintln(os.Stderr, "\t[WARN] No console output file found for : "+siddhiFilePath)
 					}
 				}
 			}
@@ -413,11 +413,11 @@ func parseExamples(categories []BBECategory) []*Example {
 	return examples
 }
 
-func getAllBalFiles(sourceDir string) []string {
+func getAllSiddhiFiles(sourceDir string) []string {
 	var files []string
 	filepath.Walk(sourceDir, func(path string, f os.FileInfo, _ error) error {
 		if !f.IsDir() {
-			if filepath.Ext(path) == balFileExtn || filepath.Ext(path) == protoFilePathExtn || filepath.Ext(path) == yamlFileExtn {
+			if filepath.Ext(path) == siddhiFileExtn || filepath.Ext(path) == protoFilePathExtn || filepath.Ext(path) == yamlFileExtn {
 				// avoiding sub dirs
 				if filepath.FromSlash(sourceDir+f.Name()) == filepath.FromSlash(path) {
 					files = append(files, sourceDir+f.Name())
@@ -540,7 +540,7 @@ func isFileExist(path string) bool {
 
 func main() {
 	copyFile("tools/siddhiByExample/templates/site.css", siteDir+"/site.css")
-	copyFile("tools/siddhiByExample/templates/ballerina-example.css", siteDir+"/ballerina-example.css")
+	copyFile("tools/siddhiByExample/templates/siddhi-example.css", siteDir+"/siddhi-example.css")
 	copyFile("tools/siddhiByExample/templates/favicon.ico", siteDir+"/favicon.ico")
 	copyFile("tools/siddhiByExample/templates/404.html", siteDir+"/404.html")
 	copyFile("tools/siddhiByExample/templates/play.png", siteDir+"/play.png")
