@@ -20,8 +20,8 @@ import (
 var cacheDir = filepath.FromSlash("/tmp/gobyexample-cache")
 var pygmentizeBin = filepath.FromSlash("tools/siddhiByExample/vendor/pygments/pygmentize")
 var githubsiddhiByExampleBaseURL = "https://github.com/ballerina-lang/ballerina/tree/master"
-var examplesDir = "target/dependencies/siddhi-examples" //os.Args[1];
-var siteDir = "test-siddhi"                             //os.Args[2];
+var examplesDir = os.Args[1] //"target/dependencies/siddhi-examples" //os.Args[1];
+var siteDir = os.Args[2]     //"test-siddhi"                             //os.Args[2];
 var dirPathWordSeparator = "-"
 var filePathWordSeparator = "_"
 var consoleOutputExtn = ".out"
@@ -331,12 +331,12 @@ func parseExamples(categories []BBECategory) []*Example {
 	examples := make([]*Example, 0)
 	for _, category := range categories {
 		samples := category.Samples
-		fmt.Println("Processing BBE Category : " + category.Title)
+		fmt.Println("Processing SBE Category : " + category.Title)
 		for _, bbeMeta := range samples {
 			exampleName := bbeMeta.Name
 			exampleId := strings.ToLower(bbeMeta.Url)
 			if len(exampleId) == 0 {
-				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping bbe : "+exampleName+". Folder path is not defined")
+				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping sbe : "+exampleName+". Folder path is not defined")
 				continue
 			}
 			exampleId = strings.Replace(exampleId, " ", dirPathWordSeparator, -1)
@@ -344,7 +344,7 @@ func parseExamples(categories []BBECategory) []*Example {
 			exampleId = strings.Replace(exampleId, "'", "", -1)
 			exampleId = dashPat.ReplaceAllString(exampleId, dirPathWordSeparator)
 			exampleBaseFilePattern := strings.Replace(exampleId, dirPathWordSeparator, filePathWordSeparator, -1)
-			fmt.Println("\tprocessing bbe: " + exampleName)
+			fmt.Println("\tprocessing sbe: " + exampleName)
 			example := Example{Name: exampleName}
 			example.Id = exampleId
 			example.Segs = make([][]*Seg, 0)
@@ -355,19 +355,19 @@ func parseExamples(categories []BBECategory) []*Example {
 			fileDirPath := examplesDir + "/examples/" + exampleId + "/"
 
 			if !isFileExist(fileDirPath) {
-				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping bbe : "+exampleName+". "+fileDirPath+" is not found")
+				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping sbe : "+exampleName+". "+fileDirPath+" is not found")
 				continue
 			}
 
 			descFilePath := fileDirPath + exampleBaseFilePattern + descriptionFileExtn
 			if !isFileExist(descFilePath) {
-				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping bbe : "+exampleName+". "+descFilePath+" is not found")
+				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping sbe : "+exampleName+". "+descFilePath+" is not found")
 				continue
 			}
 
 			siddhiFiles := getAllSiddhiFiles(fileDirPath)
 			if len(siddhiFiles) == 0 {
-				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping bbe : "+exampleName+". No *.siddhi files are found")
+				fmt.Fprintln(os.Stderr, "\t[WARN] Skipping sbe : "+exampleName+". No *.siddhi files are found")
 				continue
 			}
 
@@ -402,7 +402,7 @@ func parseExamples(categories []BBECategory) []*Example {
 			sourcePaths = rearrangedPaths
 			updatedExamplesList, pErr := prepareExample(sourcePaths, example, examples)
 			if pErr != nil {
-				fmt.Fprintln(os.Stderr, "\t[WARN] Unexpected error occured while parsing. Skipping bbe : "+example.Name, pErr)
+				fmt.Fprintln(os.Stderr, "\t[WARN] Unexpected error occured while parsing. Skipping sbe : "+example.Name, pErr)
 				continue
 			}
 			examples = updatedExamplesList
@@ -444,7 +444,7 @@ func getAllSiddhiFiles(sourceDir string) []string {
 func prepareExample(sourcePaths []string, example Example, currentExamplesList []*Example) (updatedExamplesList []*Example, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Fprintln(os.Stderr, "An error occured while processing bbe : "+example.Name)
+			fmt.Fprintln(os.Stderr, "An error occured while processing sbe : "+example.Name)
 			// find out exactly what the error was and set err
 			switch x := r.(type) {
 			case string:
@@ -492,15 +492,6 @@ func prepareExample(sourcePaths []string, example Example, currentExamplesList [
 	example.GithubLink = githubsiddhiByExampleBaseURL + "/examples/" + example.Id + "/"
 	currentExamplesList = append(currentExamplesList, &example)
 	return currentExamplesList, nil
-}
-
-func renderIndex(examples []*Example) {
-	indexTmpl := template.New("index")
-	_, err := indexTmpl.Parse(mustReadFile("tools/siddhiByExample/templates/index.tmpl"))
-	check(err)
-	indexF, err := os.Create(siteDir + "/index.html")
-	check(err)
-	indexTmpl.Execute(indexF, examples)
 }
 
 func renderExamples(examples []*Example) {
@@ -553,14 +544,8 @@ func isFileExist(path string) bool {
 }
 
 func main() {
-	copyFile("tools/siddhiByExample/templates/site.css", siteDir+"/site.css")
-	copyFile("tools/siddhiByExample/templates/siddhi-example.css", siteDir+"/siddhi-example.css")
-	copyFile("tools/siddhiByExample/templates/favicon.ico", siteDir+"/favicon.ico")
-	copyFile("tools/siddhiByExample/templates/404.html", siteDir+"/404.html")
-	copyFile("tools/siddhiByExample/templates/play.png", siteDir+"/play.png")
 	copyFile("tools/siddhiByExample/tools/all-bbes.json", siteDir+"/all-bbes.json")
 	bbeCategories := getBBECategories()
 	examples := parseExamples(bbeCategories)
-	renderIndex(examples)
 	renderExamples(examples)
 }

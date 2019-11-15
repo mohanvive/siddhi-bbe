@@ -1,10 +1,10 @@
 #!/bin/sh
-echo ".....Building BBE Site....."
+echo ".....Building SBE Site....."
 mkdir -p $2
 export GOPATH=$3
 go get github.com/russross/blackfriday
 
-#get BBE from the language master branch
+#get SBE from the language master branch
 #---- Disable temporary ---
 #rm target/dependencies/siddhi-examples -rf
 #rm ballerina-lang -rf
@@ -15,5 +15,5 @@ go get github.com/russross/blackfriday
 #rm ballerina-lang -r
 
 rm -rf test-siddhi/*
-go run tools/siddhiByExample/tools/generate.go "target/dependencies/siddhi-examples" $2
-echo "....Completed building BBE Site...."
+go run tools/siddhiByExample/tools/generate.go $1 $2
+echo "....Completed building SBE Site...."
