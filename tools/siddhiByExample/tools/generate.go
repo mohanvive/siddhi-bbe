@@ -164,6 +164,7 @@ type Example struct {
 	PrevExample                 *Example
 	FullCode                    string
 	GithubLink                  string
+	InputOutput                 string
 }
 
 type BBEMeta struct {
@@ -270,15 +271,25 @@ func parseSegs(sourcePath string) ([]*Seg, string) {
 }
 
 func parseAndRenderSegs(sourcePath string) ([]*Seg, string, string) {
-	segs, filecontent := parseSegs(sourcePath)
 	lexer := whichLexer(sourcePath)
+	if lexer == "console" {
+		segs := []*Seg{}
+		lines := readLines(sourcePath)
+		filecontent := strings.Join(lines, "\n")
+		newSeg := Seg{Docs: filecontent}
+		segs = append(segs, &newSeg)
+		return segs, "", ""
+	}
+	segs, filecontent := parseSegs(sourcePath)
 	ignoreSegment = false
 	completeCode = ""
+
 	for _, seg := range segs {
 		if seg.Docs != "" {
 			seg.DocsRendered = markdown(seg.Docs)
 		}
-		if seg.Code != "" {
+
+		if seg.Code != "" && lexer != "console" {
 			var matchOpenSpan = regexp.MustCompile("<span(?: [^>]*)?>")
 			var matchCloseSpan = regexp.MustCompile("</span>")
 			var matchOpenPre = regexp.MustCompile("<pre>")
@@ -463,6 +474,9 @@ func prepareExample(sourcePaths []string, example Example, currentExamplesList [
 			if strings.HasSuffix(sourcePath, descriptionFileExtn) {
 				descFileContent = sourceSegs[0].Docs
 				example.Descs = markdown(descFileContent)
+			} else if strings.HasSuffix(sourcePath, consoleOutputExtn) {
+				descFileContent = sourceSegs[0].Docs
+				example.InputOutput = markdown(descFileContent)
 			} else {
 				example.Segs = append(example.Segs, sourceSegs)
 			}
@@ -497,7 +511,7 @@ func renderExamples(examples []*Example) {
 	var exampleItem bytes.Buffer
 	var renderedBBEs = []string{}
 	for _, example := range examples {
-		exampleF, err := os.Create(siteDir + "/" + example.Id + ".html")
+		exampleF, err := os.Create(siteDir + "/" + example.Id + ".md")
 		exampleItem.WriteString(example.Id)
 		check(err)
 		exampleTmpl.Execute(exampleF, example)

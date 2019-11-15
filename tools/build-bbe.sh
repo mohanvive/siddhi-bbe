@@ -14,5 +14,6 @@ go get github.com/russross/blackfriday
 #mv ballerina-lang/examples target/dependencies/ballerina-examples/examples/
 #rm ballerina-lang -r
 
+rm -rf test-siddhi/*
 go run tools/siddhiByExample/tools/generate.go "target/dependencies/siddhi-examples" $2
 echo "....Completed building BBE Site...."

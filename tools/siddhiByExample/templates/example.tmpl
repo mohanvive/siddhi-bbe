@@ -1,252 +1,65 @@
-<!DOCTYPE html>
-<html>
+<!--copy to clipboard lib-->
+<script src="https://ballerina.io/js/clipboard.js-2.0.0/clipboard.min.js"></script>
 
-<head>
-    <meta charset="utf-8">
-    <meta property="og:url" content="https://siddhi.io" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title" content="Siddhi - Cloud Native Stream Processor - Siddhi by Example: {{.Name}}" />
-    <meta property="og:description" content="Siddhi by Example is a hands-on introduction to Siddhi using annotated example programs. Check out the first example or browse the full list below. " />
-    <link rel="shortcut icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <title>Siddhi by Example: {{.Name}}</title>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-92163714-2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+<script>
+   var base_url = "";
+</script>
+<script src="../../../assets/js/example.js"></script>
+<link rel=stylesheet href="../../../assets/css/example.css">
+<span class="info" dir="{{.GithubLink}}"><span>
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+<h1>{{.Name}}</h1>
 
-        gtag('config', 'UA-92163714-2');
-    </script>
+<div class="cLeftTD">
+<p>{{.Descs}}</p>
+</div>
 
-    <!-- Google Tag Manager -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-PSL2TX4');
-    </script>
-    <!-- End Google Tag Manager -->
-
-    <!--copy to clipboard lib-->
-    <script src="https://ballerina.io/js/clipboard.js-2.0.0/clipboard.min.js"></script>
-
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-        var base_url = "";
-    </script>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://use.typekit.net/son4ymv.css">
-
-    <script type="text/javascript" src="https://ballerina.io/js/highlight.pack.js"></script>
-
-    <script src="https://ballerina.io/js/ballerina-common.js"></script>
-    <link rel=stylesheet href="https://ballerina.io/css/ballerina-io.css">
-    <link rel=stylesheet href="https://ballerina.io/css/ballerina-io-bbe.css">
-    <script src="https://ballerina.io/search/require.js"></script>
-</head>
-
-<body class="cBallerina-io">
-
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSL2TX4"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <div class="row cBallerina-io-Gray-row">
-        <div class="container cBallerinaBySampleContainer">
-            <div class="FullCode">
+<div class="cBBETable-container cCodeLeft">
+<div class="cLeftTD">
+ <a class="copy"><img src="../../../images/copy.png" width="20px"/></a>
+</div>
+<div class="FullCode">
                 {{.FullCode}}
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12">
+<div>
+<table class="cTopBorder-table">
+    <tr>
+        <td class="cCodeTD"></td>
+        <td class="cDescTD"></td>
+    </tr>
+</table>
 
+<table class="cBE-body">
+    {{range  $i, $element := .Segs}}
+    {{range $element}}
+    <tr class="cTR{{if and (not .DocEmpty)}} hover-enable{{end}}">
 
-                <table class="cTopInfoContainer cTopControlsContainer">
-                    <tr>
-                        <td class="cLeftTD">
-                            <h2>{{.Name}}</h2>
-                            <p>{{.Descs}}</p>
-
-                        </td>
-                        <td class="cRightTD">
-                            <div class="cTopButtonContainer">
-                                {{if .PrevExample}}
-                                <div class="cButtonInfoContainer">
-                                    <a class="prev" href="{{.PrevExample.Id}}.html">
-                                        <span>< PREVIOUS</span>
-                                        <p>{{.PrevExample.Name}}</p>
-                                    </a>
-                                </div>
-                                {{end}} {{if .NextExample}}
-                                <div class="cButtonInfoContainer">
-                                    <a class="next" href="{{.NextExample.Id}}.html">
-                                        <span>NEXT ></span>
-                                        <p>{{.NextExample.Name}}</p>
-                                    </a>
-                                </div>
-                                {{end}}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="example" id="{{.Id}}">
-                <div class="col-xs-12 col-sm-12 col-md-12 cBBETable-container cCodeLeft">
-                    <table class="cTopControlsContainer">
-                        <tr>
-                            <td class="cLeftTD">
-                                <div class="cBreadcrums">
-                                    <ul>
-                                        <li><a href="/">Home</a></li>
-                                        <li>»</li>
-                                        <li><a href="/learn">Learn</a></li>
-                                        <li>»</li>
-                                        <li><a href="/learn/by-example">By Example</a></li>
-                                        <li>»</li>
-                                        <li>{{.Name}}</li>
-                                    </ul>
-                                </div>
-                                <div class="cBBE-links">
-                                    <ul>
-                                        <li>
-                                            <a class="copy"><img src="https://ballerina.io/img/copy-icon.svg" /></a>
-                                        </li>
-                                        <li>
-                                            <a target="_blank" href="{{.GithubLink}}"><img src="https://ballerina.io/img/github-logo-green.svg" /></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </table>
-
-                    <table class="cTopBorder-table">
-                        <tr>
-                            <td class="cCodeTD"></td>
-                            <td class="cDescTD"></td>
-                        </tr>
-                    </table>
-
-                    {{range  $i, $element := .Segs}}
-                        {{range .}}
-                            {{if ne $i 0}}
-                                {{if and (not .CodeLeading) (not .IsConsoleOutput)}}
-                                    <div class="bal-separator">
-                                        <!-- This table is a temporary table to add spacing between output and next bal file-->
-                                        <table class="cTopBorder-table">
-                                            <tbody><tr>
-                                                <td class="cCodeTD"></td>
-                                                <td class="cDescTD"></td>
-                                            </tr>
-                                        </tbody></table>
-                                    </div>
-                                {{end}}
-                            {{end}}
-                        {{end}}
-
-                    <div>
-
-                        <table class="cBBE-body">
-                            {{range $element}}
-                            <tr class="cTR{{if and (not .DocEmpty)}} hover-enable{{end}}{{if .IsConsoleOutput}} cOutputTr{{end}}">
-
-                                <td class="code{{if .CodeEmpty}} empty{{end}}{{if .CodeLeading}} leading{{end}}{{if .IsConsoleOutput}} cOutput{{end}}">
-                                    {{.CodeRendered}}
-                                </td>
-                                <td class="docs">
-                                    {{if and (not .DocEmpty)}}
-                                    <div class="cCodeDesription">
-                                        <div>
-                                            {{.DocsRendered}}
-                                        </div>
-                                    </div>
-                                    {{end}}
-                                </td>
-                            </tr>
-                            {{end}}
-                        </table>
-                    </div>
-                    {{end}}
-
-
-                    <table class="cBottomBorder-table">
-                        <tr>
-                            <td class="cCodeTD"></td>
-                            <td class="cDescTD"></td>
-                        </tr>
-                    </table>
+        <td class="code{{if .CodeEmpty}} empty{{end}}{{if .CodeLeading}} leading{{end}}">
+            {{.CodeRendered}}
+        </td>
+        <td class="docs">
+            {{if and (not .DocEmpty)}}
+            <div class="cCodeDesription">
+                <div>
+                    {{.DocsRendered}}
                 </div>
             </div>
-        </div>
-    </div>
+            {{end}}
+        </td>
+    </tr>
+    {{end}}
+    {{end}}
+</table>
+<table class="cBottomBorder-table">
+    <tr>
+        <td class="cCodeTD"></td>
+        <td class="cDescTD"></td>
+    </tr>
+</table>
+</div>
 
-    <script>
-        $(document).ready(function() {
-
-            hljs.initHighlightingOnLoad();
-
-            $(".switch").click(function() {
-                $(".cCodeRight").toggleClass('cShow');
-                $(".cCodeLeft").toggleClass('cHide');
-            });
-
-            // register "copy to clipboard" event to elements with "copy" class
-            var clipboard = new ClipboardJS('.copy', {
-                text: function(trigger) {
-                    return $('.FullCode').find('pre').text();
-                }
-            });
-
-            // Register events show hide tooltip on click event
-            clipboard.on('success', function(e) {
-                setTooltip(e.trigger, 'Copied!');
-                hideTooltip(e.trigger);
-            });
-
-            clipboard.on('error', function(e) {
-                setTooltip(e.trigger, 'Failed!');
-                hideTooltip(e.trigger);
-            });
-
-            $('.copy').tooltip({
-                trigger: 'click',
-                placement: 'bottom'
-            });
-            $("a.copy").unbind("click");
-        });
-
-        function setTooltip(btn, message) {
-            $(btn).attr('data-original-title', message)
-                .tooltip('show');
-        }
-
-        function hideTooltip(btn) {
-            setTimeout(function() {
-                $(btn).tooltip('hide').removeAttr('data-original-title');
-            }, 1000);
-        }
-    </script>
-</body>
-
-</html>
+{{.InputOutput}}
